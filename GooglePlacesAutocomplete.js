@@ -129,16 +129,21 @@ export default class GooglePlacesAutocomplete extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    let listViewDisplayed = true;
+
     if (nextProps.listViewDisplayed !== 'auto') {
-      this.setState({
-        listViewDisplayed: nextProps.listViewDisplayed,
-      });
+      listViewDisplayed = nextProps.listViewDisplayed;
     }
 
-    if(typeof(nextProps.text) !== "undefined" && this.state.text !== nextProps.text) {
+    if (typeof (nextProps.text) !== "undefined" && this.state.text !== nextProps.text) {
       this.setState({
-        listViewDisplayed:true
-      }, this._handleChangeText(nextProps.text));
+          listViewDisplayed: listViewDisplayed
+        },
+        this._handleChangeText(nextProps.text));
+    } else {
+      this.setState({
+        listViewDisplayed: listViewDisplayed
+      });
     }
   }
 
@@ -527,7 +532,7 @@ export default class GooglePlacesAutocomplete extends Component {
 
     return (
       <Text style={[{flex: 1}, this.props.suppressDefaultStyles ? {} : defaultStyles.description, this.props.styles.description, rowData.isPredefinedPlace ? this.props.styles.predefinedPlacesDescription : {}]}
-        numberOfLines={this.props.numberOfLines}
+        numberOfLines={1}
       >
         {this._renderDescription(rowData)}
       </Text>
@@ -745,8 +750,7 @@ GooglePlacesAutocomplete.propTypes = {
   isRowScrollable: PropTypes.bool,
   text: PropTypes.string,
   textInputHide: PropTypes.bool,
-  suppressDefaultStyles: PropTypes.bool,
-  numberOfLines: PropTypes.number
+  suppressDefaultStyles: PropTypes.bool
 }
 GooglePlacesAutocomplete.defaultProps = {
   placeholder: 'Search',
@@ -789,8 +793,7 @@ GooglePlacesAutocomplete.defaultProps = {
   listViewDisplayed: 'auto',
   debounce: 0,
   textInputHide: false,
-  suppressDefaultStyles: false,
-  numberOfLines: 1
+  suppressDefaultStyles: false
 }
 
 // this function is still present in the library to be retrocompatible with version < 1.1.0
